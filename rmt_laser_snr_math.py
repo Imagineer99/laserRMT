@@ -1,8 +1,3 @@
-# %%
-model_name = "cognitivecomputations/dolphin-2.6-mistral-7b-dpo"  # Change to your preferred model
-
-
-# %%
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import datasets
@@ -190,21 +185,16 @@ class ModelModifier:
 # Usage
 modifier = ModelModifier(model_name)
 
-# %%
 layer_numbers = list(range(31, -1, -1))
 layer_numbers = [f".{l}." for l in layer_numbers]
 print(layer_numbers)
 
-
 layer_types=['mlp.gate_proj','mlp.down_proj', 'mlp.up_proj', 'self_attn.q_proj', 'self_attn.k_proj', 'self_attn.v_proj', 'self_attn.o_proj']
-
 
 modifier.assess_layers_snr(layer_types, layer_numbers)
 top_k_layers = modifier.select_layers_for_modification(15)  # Select top 15 layers
 print(top_k_layers, flush=True)
 
 modifier.test_and_modify_layers(top_k_layers)
-# %%
+
 modifier.save_model("laser_model")
-
-
